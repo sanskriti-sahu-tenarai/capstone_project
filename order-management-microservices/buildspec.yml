@@ -1,0 +1,30 @@
+version: 0.2
+
+phases:
+  install:
+    runtime-versions:
+      golang: 1.22
+  pre_build:
+    commands:
+      - go mod download
+      - go test ./...
+  build:
+    commands:
+      - mkdir -p dist
+      - GOOS=linux GOARCH=amd64 CGO_ENABLED=0 go build -o dist/order-service .
+      - cd product-service
+      - go mod download
+      - GOOS=linux GOARCH=amd64 CGO_ENABLED=0 go build -o ../dist/product-service .
+      - cd ..
+      - cp database/migrations/001_create_orders_table.sql dist/
+  post_build:
+    commands:
+      - echo "Go services built successfully"
+
+artifacts:
+  files:
+    - order-service
+    - product-service
+    - 001_create_orders_table.sql
+  base-directory: dist
+  discard-paths: yes
