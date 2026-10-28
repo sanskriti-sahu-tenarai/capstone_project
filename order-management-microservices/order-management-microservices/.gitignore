@@ -1,0 +1,14 @@
+.env
+bin/
+oms
+product-svc
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+*.test
+*.out
+vendor/
+.idea/
+.vscode/
